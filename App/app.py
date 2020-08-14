@@ -60,7 +60,7 @@ def loadCSVFile (file, lst, sep=";"):
                 lst.append(row)
     except:
         del lst[:]
-        print("Se presento un error en la carga del archivo")
+        print("Se presentó un error en la carga del archivo")
     
     t1_stop = process_time() #tiempo final
     print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
@@ -74,6 +74,7 @@ def printMenu():
     print("2- Contar los elementos de la Lista")
     print("3- Contar elementos filtrados por palabra clave")
     print("4- Consultar elementos a partir de dos listas")
+    print("5- Consultar buenas películas de cierto director")
     print("0- Salir")
 
 def countElementsFilteredByColumn(criteria, column, lst):
@@ -109,6 +110,24 @@ def countElementsByCriteria(criteria, column, lst):
     """
     return 0
 
+def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
+    lista1 = []
+    contador = 0
+    contador2 = 0
+    for i in range(0, len(listaCalif)):    
+        if listaDirector[i]["director_name"].lower() == nombre.lower():
+            lista1.append(i)
+    
+    for i in lista1:
+        if float(listaCalif[i]["vote_average"]) >= 6:
+            contador += float(listaCalif[i]["vote_average"])
+            contador2 += 1
+    if contador2 == 0:
+        return 0, 0
+
+    prom = contador/contador2
+    return contador2, prom
+
 
 def main():
     """
@@ -119,13 +138,15 @@ def main():
     Return: None 
     """
     lista = [] #instanciar una lista vacia
+    lista2 = []
     while True:
         printMenu() #imprimir el menu de opciones en consola
         inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
-                loadCSVFile("Data/test.csv", lista) #llamar funcion cargar datos
-                print("Datos cargados, "+str(len(lista))+" elementos cargados")
+                loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\SmallMoviesDetailsCleaned.csv", lista)
+                loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab0_202020\Data\MoviesCastingRaw-small.csv", lista2)
+                print("Datos cargados, "+str(len(lista)+len(lista2))+" elementos cargados")
             elif int(inputs[0])==2: #opcion 2
                 if len(lista)==0: #obtener la longitud de la lista
                     print("La lista esta vacía")    
@@ -138,6 +159,10 @@ def main():
                 criteria =input('Ingrese el criterio de búsqueda\n')
                 counter=countElementsByCriteria(criteria,0,lista)
                 print("Coinciden ",counter," elementos con el crtierio: '", criteria ,"' (en construcción ...)")
+            elif int(inputs[0])==5:
+                nombreDir = input("Ingrese el nombre del director: ")
+                numPeli, prom = encontrarBuenasPeli(lista, lista2, nombreDir)
+                print("El director {0} tiene {1} pelicula(s) buenas con puntaje promedio de {2}.".format(nombreDir, numPeli, prom))
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
 
