@@ -10,5 +10,5 @@
 Este trabajo está siendo realizado por:
 
 Juan Andrés Romero Colmenares / j.romero11 - 202013449
-Luccas Rojas / (login uniandes) - (id)
+Luccas Rojas / l.rojasb@uniandes.edu.co - (201923052)
 Juan Manuel / (login uniandes) - (id)
