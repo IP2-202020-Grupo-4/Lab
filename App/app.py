@@ -118,7 +118,6 @@ def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
     for i in range(0, len(listaCalif)):
         if listaDirector[i]["director_name"].lower() == nombre.lower():
             lst.addLast(lista1, i)
-            print(i)
 
     tam = lst.size(lista1)
 
