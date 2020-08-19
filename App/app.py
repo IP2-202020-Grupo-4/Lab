@@ -111,16 +111,20 @@ def countElementsByCriteria(criteria, column, lst):
     return 0
 
 def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
-    lista1 = []
+    lista1 = lst.newList("ARRAY_LIST")
     contador = 0
     contador2 = 0
-    for i in range(0, len(listaCalif)):    
+    for i in range(0, len(listaCalif)):
         if listaDirector[i]["director_name"].lower() == nombre.lower():
-            lista1.append(i)
-    
-    for i in lista1:
-        if float(listaCalif[i]["vote_average"]) >= 6:
-            contador += float(listaCalif[i]["vote_average"])
+            lst.addLast(lista1, i)
+            print(i)
+
+    tam = lst.size(lista1)
+
+    for i in range(1, tam+1):
+        ind = lst.getElement(lista1, i)    
+        if float(listaCalif[ind]["vote_average"]) >= 6:
+            contador += float(listaCalif[ind]["vote_average"])
             contador2 += 1
     if contador2 == 0:
         return 0, 0
