@@ -1,54 +1,14 @@
-"""
- * Copyright 2020, Departamento de sistemas y Computación, Universidad de Los Andes
- * 
- * Contribución de:
- *
- * Cristian Camilo Castellanos
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
- COMENTARIO
- """
-
-"""
-  Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista.
-"""
-
 import config as cf
 import sys
 import csv
 from time import process_time 
 from ADT import list as lst
-from Sorting import insertionsort as insSort
-from Sorting import shellsort as SSort
-from Sorting import selectionsort as selSort
+from Sorting import insertionsort
+from Sorting import selectionsort
+from Sorting import shellsort
 
 def lessVote(element1, element2):
     if float(element1['vote_average']) < float(element2['vote_average']):
-        return True
-    return False
-
-def lessCount(element1, element2):
-    if float(element1['vote_count']) < float(element2['vote_count']):
-        return True
-    return False
-
-def greaterCount(element1, element2):
-    if float(element1['vote_count']) > float(element2['vote_count']):
         return True
     return False
 
@@ -99,7 +59,6 @@ def printMenu():
     print("3- Contar elementos filtrados por palabra clave")
     print("4- Consultar elementos a partir de dos listas")
     print("5- Consultar buenas películas de cierto director")
-    print("6- Consultar ranking de películas")
     print("0- Salir")
 
 def countElementsFilteredByColumn(criteria, column, lst):
@@ -157,48 +116,9 @@ def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
     return contador2, prom
 
 
-def rankingPeli(listaCalif, decision, numPel)->list:
-    listaTAD = lst.newList("ARRAY_LIST")
-    
-    for i in listaCalif:
-        lst.addLast(listaTAD, i)
+def rankingPeli(listaCalif)->list:
 
-    if decision == 1:
-        listaMejorVotos = lst.newList("ARRAY_LIST")
-        insSort.insertionSort(listaTAD, greaterCount)
-        
-        for i in range(1, numPel+1):
-            ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaMejorVotos, ind)
-        return listaMejorVotos
-
-    elif decision == 2:
-        listaPeorVotos = lst.newList("ARRAY_LIST")
-        insSort.insertionSort(listaTAD, lessCount)
-
-        for i in range(1, numPel+1):
-            ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaPeorVotos, ind)
-        return listaPeorVotos
-
-    elif decision == 3:
-        listaMejorAverage = lst.newList("ARRAY_LIST")
-        insSort.insertionSort(listaTAD, greaterVote)
-
-        for i in range(1, numPel+1):
-            ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaMejorAverage, ind)
-        return listaMejorAverage
-
-    elif decision == 4:
-        listaPeorAverage = lst.newList("ARRAY_LIST")
-        insSort.insertionSort(listaTAD, lessVote)
-
-        for i in range(1, numPel+1):
-            ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaPeorAverage, ind)
-        return listaPeorAverage
-
+    insertionsort(listaCalif)
 
 
 def main():
@@ -219,6 +139,7 @@ def main():
                 loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\SmallMoviesDetailsCleaned.csv", lista)
                 loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab0_202020\Data\MoviesCastingRaw-small.csv", lista2)
                 print("Datos cargados, "+str(len(lista)+len(lista2))+" elementos cargados")
+                print(lista)
             elif int(inputs[0])==2: #opcion 2
                 if len(lista)==0: #obtener la longitud de la lista
                     print("La lista esta vacía")    
@@ -235,17 +156,6 @@ def main():
                 nombreDir = input("Ingrese el nombre del director: ")
                 numPeli, prom = encontrarBuenasPeli(lista, lista2, nombreDir)
                 print("El director {0} tiene {1} pelicula(s) buenas con puntaje promedio de {2}.".format(nombreDir, numPeli, prom))
-            elif int(inputs[0])==6:
-                print("¿Qué tipo de ranking quiere consultar?")
-                print("1- 10 películas mejor votadas.")
-                print("2- 10 películas peor votadas.")
-                print("3- 10 películas con mejor calificación.")
-                print("4- 10 películas con peor calificación.")
-                decision = int(input(""))
-                numPel = int(input("¿Cuántas películas quiere meter en el ranking? = "))
-                resultado = rankingPeli(lista, decision, numPel)
-                """Falta terminar las opciones"""
-
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
 
