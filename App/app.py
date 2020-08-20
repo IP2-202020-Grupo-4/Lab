@@ -213,7 +213,7 @@ def main():
     lista2 = []
     while True:
         printMenu() #imprimir el menu de opciones en consola
-        inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
+        inputs =input('Seleccione una opción para continuar:\n') #leer opción ingresada
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
                 loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\SmallMoviesDetailsCleaned.csv", lista)
@@ -242,7 +242,7 @@ def main():
                 print("3- 10 películas con mejor calificación.")
                 print("4- 10 películas con peor calificación.")
                 decision = int(input(""))
-                numPel = int(input("¿Cuántas películas quiere meter en el ranking? = "))
+                numPel = int(input("¿Cuántas películas quiere meter en el ranking? \n: "))
                 resultado = rankingPeli(lista, decision, numPel)
                 """Falta terminar las opciones"""
 
