@@ -100,6 +100,7 @@ def printMenu():
     print("4- Consultar elementos a partir de dos listas")
     print("5- Consultar buenas películas de cierto director")
     print("6- Consultar ranking de películas")
+    print("7- Conocer director")
     print("0- Salir")
 
 def countElementsFilteredByColumn(criteria, column, lst):
@@ -164,49 +165,74 @@ def rankingPeli(listaCalif, decision, numPel)->list:
         lst.addLast(listaTAD, i)
 
     if decision == 1:
-        listaMejorVotos = lst.newList("ARRAY_LIST")
-        insSort.insertionSort(listaTAD, greaterCount)
+        listaMasVotos = lst.newList("ARRAY_LIST")
+        SSort.shellSort(listaTAD, greaterCount)
         
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaMejorVotos, ind)
-        return listaMejorVotos["elements"]
+            lst.addLast(listaMasVotos, ind["title"])
+        return listaMasVotos["elements"]
 
     elif decision == 2:
-        listaPeorVotos = lst.newList("ARRAY_LIST")
-        insSort.insertionSort(listaTAD, lessCount)
-
+        
+        listaMenosVotos = lst.newList("ARRAY_LIST")
+        SSort.shellSort(listaTAD, lessCount)
+    
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaPeorVotos, ind)
-        return listaPeorVotos["elements"]
+            lst.addLast(listaMenosVotos, ind["title"])
+
+        return listaMenosVotos["elements"]
 
     elif decision == 3:
         listaMejorAverage = lst.newList("ARRAY_LIST")
-        insSort.insertionSort(listaTAD, greaterVote)
+        SSort.shellSort(listaTAD, greaterVote)
 
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaMejorAverage, ind)
+            lst.addLast(listaMejorAverage, ind["title"])
         return listaMejorAverage["elements"]
 
     elif decision == 4:
         listaPeorAverage = lst.newList("ARRAY_LIST")
-        insSort.insertionSort(listaTAD, lessVote)
+        SSort.shellSort(listaTAD, lessVote)
 
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaPeorAverage, ind)
+            lst.addLast(listaPeorAverage, ind["title"])
         return listaPeorAverage["elements"]
 
-def pruebaCarga(lista):
+def conocerDirector(listaCalif, listaDirector, nombre)->tuple:
+    lista1 = lst.newList("ARRAY_LIST")
+    lista2 = lst.newList("ARRAY_LIST")
+
+    contador = 0
+    contador2 = 0
+    for i in range(0, len(listaCalif)):
+        if listaDirector[i]["director_name"].lower() == nombre.lower():
+            lst.addLast(lista1, i)
+
+    tam = lst.size(lista1)
+
+    for i in range(1, tam+1):
+        ind = lst.getElement(lista1, i)    
+        contador += float(listaCalif[ind]["vote_average"])
+        contador2 += 1
+        titPeli = listaCalif[ind]["title"]
+        lst.addLast(lista2, titPeli)
+    if contador2 == 0:
+        return lista2["elements"], 0, 0
+
+    prom = contador/contador2
+    return lista2["elements"], contador2, prom
+
+def pruebaCarga(listaCalif):
     start = process_time()
-    listaTAD = lst.newList("ARRAY_LIST")
-    for i in lista:
+    listaTAD = lst.newList("DOUBLE_LINKED")
+    
+    for i in listaCalif:
         lst.addLast(listaTAD, i)
     stop = process_time()
-
-    print(process_time())
 
     print("Tiempo de ejecución ", stop, start ," segundos")
 
@@ -226,8 +252,8 @@ def main():
         inputs =input('Seleccione una opción para continuar:\n') #leer opción ingresada
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
-                loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\SmallMoviesDetailsCleaned.csv", lista)
-                loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\MoviesCastingRaw-small.csv", lista2)
+                loadCSVFile("Data\SmallMoviesDetailsCleaned.csv", lista)
+                loadCSVFile("Data\MoviesCastingRaw-small.csv", lista2)
                 print("Datos cargados, "+str(len(lista)+len(lista2))+" elementos cargados")
             elif int(inputs[0])==2: #opcion 2
                 if len(lista)==0: #obtener la longitud de la lista
@@ -247,17 +273,18 @@ def main():
                 print("El director {0} tiene {1} pelicula(s) buenas con puntaje promedio de {2}.".format(nombreDir, numPeli, prom))
             elif int(inputs[0])==6:
                 print("¿Qué tipo de ranking quiere consultar?")
-                print("1- 10 películas mejor votadas.")
-                print("2- 10 películas peor votadas.")
-                print("3- 10 películas con mejor calificación.")
-                print("4- 10 películas con peor calificación.")
+                print("1- Ranking películas más votadas.")
+                print("2- Ranking películas menos votadas.")
+                print("3- Ranking películas con mejor calificación.")
+                print("4- Ranking películas con peor calificación.")
                 decision = int(input(""))
                 numPel = int(input("¿Cuántas películas quiere meter en el ranking? \n: "))
                 resultado = rankingPeli(lista, decision, numPel)
-                """Falta terminar las opciones"""
+                print("El ranking solicitado es: {0}".format(resultado))
             elif int(inputs[0])==7:
-                pruebaCarga(lista)
-
+                nombreDir = input("Ingrese el nombre del director: ")
+                titulos, numPeli, prom = conocerDirector(lista, lista2, nombreDir)
+                print("El director {0} tiene {1} pelicula(s) con puntaje promedio de {2}.\nSus películas son: {3}".format(nombreDir, numPeli, prom, titulos))
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
 
