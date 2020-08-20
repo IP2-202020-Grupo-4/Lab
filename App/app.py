@@ -126,7 +126,7 @@ def countElementsFilteredByColumn(criteria, column, lst):
             if criteria.lower() in element[column].lower(): #filtrar por palabra clave 
                 counter+=1
         t1_stop = process_time() #tiempo final
-        print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+        print("Tiempo de ejecución ", t1_stop - t1_start," segundos")
     return counter
 
 def countElementsByCriteria(criteria, column, lst):
@@ -199,6 +199,16 @@ def rankingPeli(listaCalif, decision, numPel)->list:
             lst.addLast(listaPeorAverage, ind)
         return listaPeorAverage["elements"]
 
+def pruebaCarga(lista):
+    start = process_time()
+    listaTAD = lst.newList("ARRAY_LIST")
+    for i in lista:
+        lst.addLast(listaTAD, i)
+    stop = process_time()
+
+    print(process_time())
+
+    print("Tiempo de ejecución ", stop, start ," segundos")
 
 
 def main():
@@ -245,6 +255,8 @@ def main():
                 numPel = int(input("¿Cuántas películas quiere meter en el ranking? \n: "))
                 resultado = rankingPeli(lista, decision, numPel)
                 """Falta terminar las opciones"""
+            elif int(inputs[0])==7:
+                pruebaCarga(lista)
 
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
