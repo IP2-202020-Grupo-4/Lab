@@ -14,3 +14,5 @@ Juan Andrés Romero Colmenares / j.romero11 - 202013449
 Luccas Rojas / l.rojasb - 201923052
 
 Juan Manuel Ramírez / jm.ramirezt1 - 202013256
+
+Los requerimientos están siendo desarrollados en App/app.py
