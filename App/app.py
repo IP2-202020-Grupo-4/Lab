@@ -217,7 +217,7 @@ def main():
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
                 loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\SmallMoviesDetailsCleaned.csv", lista)
-                loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab0_202020\Data\MoviesCastingRaw-small.csv", lista2)
+                loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\MoviesCastingRaw-small.csv", lista2)
                 print("Datos cargados, "+str(len(lista)+len(lista2))+" elementos cargados")
             elif int(inputs[0])==2: #opcion 2
                 if len(lista)==0: #obtener la longitud de la lista
