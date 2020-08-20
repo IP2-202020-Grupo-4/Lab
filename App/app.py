@@ -170,7 +170,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
             lst.addLast(listaMejorVotos, ind)
-        return listaMejorVotos
+        return listaMejorVotos["elements"]
 
     elif decision == 2:
         listaPeorVotos = lst.newList("ARRAY_LIST")
@@ -179,7 +179,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
             lst.addLast(listaPeorVotos, ind)
-        return listaPeorVotos
+        return listaPeorVotos["elements"]
 
     elif decision == 3:
         listaMejorAverage = lst.newList("ARRAY_LIST")
@@ -188,7 +188,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
             lst.addLast(listaMejorAverage, ind)
-        return listaMejorAverage
+        return listaMejorAverage["elements"]
 
     elif decision == 4:
         listaPeorAverage = lst.newList("ARRAY_LIST")
@@ -197,7 +197,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
             lst.addLast(listaPeorAverage, ind)
-        return listaPeorAverage
+        return listaPeorAverage["elements"]
 
 
 
