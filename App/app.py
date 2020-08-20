@@ -33,9 +33,9 @@ import sys
 import csv
 from time import process_time 
 from ADT import list as lst
-from Sorting import insertionsort
-from Sorting import selectionsort
-from Sorting import shellsort
+from Sorting import insertionsort as insSort
+from Sorting import shellsort as SSort
+from Sorting import selectionsort as selSort
 
 def lessVote(element1, element2):
     if float(element1['vote_average']) < float(element2['vote_average']):
@@ -99,6 +99,7 @@ def printMenu():
     print("3- Contar elementos filtrados por palabra clave")
     print("4- Consultar elementos a partir de dos listas")
     print("5- Consultar buenas películas de cierto director")
+    print("6- Consultar ranking de películas")
     print("0- Salir")
 
 def countElementsFilteredByColumn(criteria, column, lst):
@@ -164,7 +165,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
 
     if decision == 1:
         listaMejorVotos = lst.newList("ARRAY_LIST")
-        insertionsort(listaTAD, greaterCount)
+        insSort.insertionSort(listaTAD, greaterCount)
         
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
@@ -173,7 +174,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
 
     elif decision == 2:
         listaPeorVotos = lst.newList("ARRAY_LIST")
-        insertionsort(listaTAD, lessCount)
+        insSort.insertionSort(listaTAD, lessCount)
 
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
@@ -182,7 +183,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
 
     elif decision == 3:
         listaMejorAverage = lst.newList("ARRAY_LIST")
-        insertionsort(listaTAD, greaterVote)
+        insSort.insertionSort(listaTAD, greaterVote)
 
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
@@ -191,7 +192,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
 
     elif decision == 4:
         listaPeorAverage = lst.newList("ARRAY_LIST")
-        insertionsort(listaTAD, lessVote)
+        insSort.insertionSort(listaTAD, lessVote)
 
         for i in range(1, numPel+1):
             ind = lst.getElement(listaTAD, i)
