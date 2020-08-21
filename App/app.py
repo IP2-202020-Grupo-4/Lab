@@ -230,6 +230,30 @@ def pruebaCarga(listaCalif):
     stop = process_time()
 
     print("Tiempo de ejecución ", stop-start ," segundos")
+=======
+
+    for i in range(1, tam+1):
+        ind = lst.getElement(lista1, i)    
+        contador += float(listaCalif[ind]["vote_average"])
+        contador2 += 1
+        titPeli = listaCalif[ind]["title"]
+        lst.addLast(lista2, titPeli)
+    if contador2 == 0:
+        return lista2["elements"], 0, 0
+
+    prom = contador/contador2
+    return lista2["elements"], contador2, prom
+
+def pruebaCarga(listaCalif):
+    start = process_time()
+    listaTAD = lst.newList("DOUBLE_LINKED")
+    
+    for i in listaCalif:
+        lst.addLast(listaTAD, i)
+    stop = process_time()
+
+    print("Tiempo de ejecución ", stop, start ," segundos")
+
 
 
 def main():
@@ -247,8 +271,8 @@ def main():
         inputs =input('Seleccione una opción para continuar:\n') #leer opción ingresada
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
-                loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\SmallMoviesDetailsCleaned.csv", lista)
-                loadCSVFile(r"C:\Users\Juan PC\Documents\Python Scripts\Lab\Data\MoviesCastingRaw-small.csv", lista2)
+                loadCSVFile("Data\SmallMoviesDetailsCleaned.csv", lista)
+                loadCSVFile("Data\MoviesCastingRaw-small.csv", lista2)
                 print("Datos cargados, "+str(len(lista)+len(lista2))+" elementos cargados")
             elif int(inputs[0])==2: #opcion 2
                 if len(lista)==0: #obtener la longitud de la lista
