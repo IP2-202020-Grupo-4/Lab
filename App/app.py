@@ -219,40 +219,16 @@ def conocerDirector(listaCalif, listaDirector, nombre)->tuple:
     return lista2["elements"], contador2, prom
 
 def pruebaCarga(listaCalif):
-    
-    listaTAD = lst.newList("SINGLE_LINKED")
+    listaTAD = lst.newList("ARRAY_LIST")
     
     for i in listaCalif:
         lst.addLast(listaTAD, i)
 
     start = process_time()
-    selSort.selectionSort(listaTAD, greaterCount)
+    SSort.shellSort(listaTAD, greaterVote)
     stop = process_time()
 
-    print("Tiempo de ejecución ", stop-start ," segundos")
-=======
-
-    for i in range(1, tam+1):
-        ind = lst.getElement(lista1, i)    
-        contador += float(listaCalif[ind]["vote_average"])
-        contador2 += 1
-        titPeli = listaCalif[ind]["title"]
-        lst.addLast(lista2, titPeli)
-    if contador2 == 0:
-        return lista2["elements"], 0, 0
-
-    prom = contador/contador2
-    return lista2["elements"], contador2, prom
-
-def pruebaCarga(listaCalif):
-    start = process_time()
-    listaTAD = lst.newList("DOUBLE_LINKED")
-    
-    for i in listaCalif:
-        lst.addLast(listaTAD, i)
-    stop = process_time()
-
-    print("Tiempo de ejecución ", stop, start ," segundos")
+    print("Tiempo de ejecución ", stop - start ," segundos")
 
 
 
