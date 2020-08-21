@@ -96,11 +96,9 @@ def printMenu():
     print("\nBienvenido")
     print("1- Cargar Datos")
     print("2- Contar los elementos de la Lista")
-    print("3- Contar elementos filtrados por palabra clave")
-    print("4- Consultar elementos a partir de dos listas")
-    print("5- Consultar buenas películas de cierto director")
-    print("6- Consultar ranking de películas")
-    print("7- Conocer director")
+    print("3- Consultar buenas películas de cierto director")
+    print("4- Consultar ranking de películas")
+    print("5- Conocer director")
     print("0- Salir")
 
 def countElementsFilteredByColumn(criteria, column, lst):
@@ -129,12 +127,6 @@ def countElementsFilteredByColumn(criteria, column, lst):
         t1_stop = process_time() #tiempo final
         print("Tiempo de ejecución ", t1_stop - t1_start," segundos")
     return counter
-
-def countElementsByCriteria(criteria, column, lst):
-    """
-    Retorna la cantidad de elementos que cumplen con un criterio para una columna dada
-    """
-    return 0
 
 def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
     lista1 = lst.newList("ARRAY_LIST")
@@ -227,6 +219,32 @@ def conocerDirector(listaCalif, listaDirector, nombre)->tuple:
     return lista2["elements"], contador2, prom
 
 def pruebaCarga(listaCalif):
+    
+    listaTAD = lst.newList("SINGLE_LINKED")
+    
+    for i in listaCalif:
+        lst.addLast(listaTAD, i)
+
+    start = process_time()
+    selSort.selectionSort(listaTAD, greaterCount)
+    stop = process_time()
+
+    print("Tiempo de ejecución ", stop-start ," segundos")
+=======
+
+    for i in range(1, tam+1):
+        ind = lst.getElement(lista1, i)    
+        contador += float(listaCalif[ind]["vote_average"])
+        contador2 += 1
+        titPeli = listaCalif[ind]["title"]
+        lst.addLast(lista2, titPeli)
+    if contador2 == 0:
+        return lista2["elements"], 0, 0
+
+    prom = contador/contador2
+    return lista2["elements"], contador2, prom
+
+def pruebaCarga(listaCalif):
     start = process_time()
     listaTAD = lst.newList("DOUBLE_LINKED")
     
@@ -235,6 +253,7 @@ def pruebaCarga(listaCalif):
     stop = process_time()
 
     print("Tiempo de ejecución ", stop, start ," segundos")
+
 
 
 def main():
@@ -259,19 +278,11 @@ def main():
                 if len(lista)==0: #obtener la longitud de la lista
                     print("La lista esta vacía")    
                 else: print("La lista tiene "+str(len(lista))+" elementos")
-            elif int(inputs[0])==3: #opcion 3
-                criteria =input('Ingrese el criterio de búsqueda\n')
-                counter=countElementsFilteredByColumn(criteria, "nombre", lista) #filtrar una columna por criterio  
-                print("Coinciden ",counter," elementos con el crtierio: ", criteria  )
-            elif int(inputs[0])==4: #opcion 4
-                criteria =input('Ingrese el criterio de búsqueda\n')
-                counter=countElementsByCriteria(criteria,0,lista)
-                print("Coinciden ",counter," elementos con el crtierio: '", criteria ,"' (en construcción ...)")
-            elif int(inputs[0])==5:
+            elif int(inputs[0])==3:
                 nombreDir = input("Ingrese el nombre del director: ")
                 numPeli, prom = encontrarBuenasPeli(lista, lista2, nombreDir)
                 print("El director {0} tiene {1} pelicula(s) buenas con puntaje promedio de {2}.".format(nombreDir, numPeli, prom))
-            elif int(inputs[0])==6:
+            elif int(inputs[0])==4:
                 print("¿Qué tipo de ranking quiere consultar?")
                 print("1- Ranking películas más votadas.")
                 print("2- Ranking películas menos votadas.")
@@ -281,12 +292,15 @@ def main():
                 numPel = int(input("¿Cuántas películas quiere meter en el ranking? \n: "))
                 resultado = rankingPeli(lista, decision, numPel)
                 print("El ranking solicitado es: {0}".format(resultado))
-            elif int(inputs[0])==7:
+            elif int(inputs[0])==5:
                 nombreDir = input("Ingrese el nombre del director: ")
                 titulos, numPeli, prom = conocerDirector(lista, lista2, nombreDir)
                 print("El director {0} tiene {1} pelicula(s) con puntaje promedio de {2}.\nSus películas son: {3}".format(nombreDir, numPeli, prom, titulos))
+            elif int(inputs[0])==6:
+                pruebaCarga(lista)
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
 
 if __name__ == "__main__":
     main()
+
