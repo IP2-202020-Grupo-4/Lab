@@ -32,7 +32,7 @@ import config as cf
 import sys
 import csv
 from time import process_time 
-from ADT import list as lst
+from ADT import list as lt
 from Sorting import insertionsort as insSort
 from Sorting import shellsort as SSort
 from Sorting import selectionsort as selSort
@@ -57,22 +57,20 @@ def greaterVote(element1, element2):
         return True
     return False
 
-def loadCSVFile (file, lst, sep=";"):
+def loadCSVFile (file, sep=";"):
     """
     Carga un archivo csv a una lista
     Args:
-        file 
-            Archivo de texto del cual se cargaran los datos requeridos.
-        lst :: []
-            Lista a la cual quedaran cargados los elementos despues de la lectura del archivo.
-        sep :: str
-            Separador escodigo para diferenciar a los distintos elementos dentro del archivo.
-    Try:
+        file
+            Archivo csv del cual se importaran los datos
+        sep = ";"
+            Separador utilizado para determinar cada objeto dentro del archivo
+        Try:
         Intenta cargar el archivo CSV a la lista que se le pasa por parametro, si encuentra algun error
         Borra la lista e informa al usuario
-    Returns: None   
+    Returns: None  
     """
-    del lst[:]
+    lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
     print("Cargando archivo ....")
     t1_start = process_time() #tiempo inicial
     dialect = csv.excel()
@@ -81,13 +79,13 @@ def loadCSVFile (file, lst, sep=";"):
         with open(file, encoding="utf-8") as csvfile:
             spamreader = csv.DictReader(csvfile, dialect=dialect)
             for row in spamreader: 
-                lst.append(row)
+                lt.addLast(lst,row)
     except:
-        del lst[:]
-        print("Se presentó un error en la carga del archivo")
-    
+        print("Hubo un error con la carga del archivo")
     t1_stop = process_time() #tiempo final
     print("Tiempo de ejecución ",t1_stop-t1_start," segundos")
+    return lst
+
 
 def printMenu():
     """
@@ -101,47 +99,20 @@ def printMenu():
     print("5- Conocer director")
     print("0- Salir")
 
-def countElementsFilteredByColumn(criteria, column, lst):
-    """
-    Retorna cuantos elementos coinciden con un criterio para una columna dada  
-    Args:
-        criteria:: str
-            Critero sobre el cual se va a contar la cantidad de apariciones
-        column
-            Columna del arreglo sobre la cual se debe realizar el conteo
-        list
-            Lista en la cual se realizará el conteo, debe estar inicializada
-    Return:
-        counter :: int
-            la cantidad de veces ue aparece un elemento con el criterio definido
-    """
-    if len(lst)==0:
-        print("La lista esta vacía")  
-        return 0
-    else:
-        t1_start = process_time() #tiempo inicial
-        counter=0 #Cantidad de repeticiones
-        for element in lst:
-            if criteria.lower() in element[column].lower(): #filtrar por palabra clave 
-                counter+=1
-        t1_stop = process_time() #tiempo final
-        print("Tiempo de ejecución ", t1_stop - t1_start," segundos")
-    return counter
-
 def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
-    lista1 = lst.newList("ARRAY_LIST")
+    lista1 = lt.newList("ARRAY_LIST")
     contador = 0
     contador2 = 0
-    for i in range(0, len(listaCalif)):
-        if listaDirector[i]["director_name"].lower() == nombre.lower():
-            lst.addLast(lista1, i)
+    for i in range(0, lt.size(listaCalif)):
+        if listaDirector["elements"][i]["director_name"].lower() == nombre.lower():
+            lt.addLast(lista1, i)
 
-    tam = lst.size(lista1)
+    tam = lt.size(lista1)
 
     for i in range(1, tam+1):
-        ind = lst.getElement(lista1, i)    
-        if float(listaCalif[ind]["vote_average"]) >= 6:
-            contador += float(listaCalif[ind]["vote_average"])
+        ind = lt.getElement(lista1, i)    
+        if float(listaCalif["elements"][ind]["vote_average"]) >= 6:
+            contador += float(listaCalif["elements"][ind]["vote_average"])
             contador2 += 1
     if contador2 == 0:
         return 0, 0
@@ -151,67 +122,63 @@ def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
 
 
 def rankingPeli(listaCalif, decision, numPel)->list:
-    listaTAD = lst.newList("ARRAY_LIST")
     
-    for i in listaCalif:
-        lst.addLast(listaTAD, i)
-
     if decision == 1:
-        listaMasVotos = lst.newList("ARRAY_LIST")
-        SSort.shellSort(listaTAD, greaterCount)
+        listaMasVotos = lt.newList("ARRAY_LIST")
+        SSort.shellSort(listaCalif, greaterCount)
         
         for i in range(1, numPel+1):
-            ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaMasVotos, ind["title"])
+            ind = lt.getElement(listaCalif, i)
+            lt.addLast(listaMasVotos, ind["title"])
         return listaMasVotos["elements"]
 
     elif decision == 2:
         
-        listaMenosVotos = lst.newList("ARRAY_LIST")
-        SSort.shellSort(listaTAD, lessCount)
+        listaMenosVotos = lt.newList("ARRAY_LIST")
+        SSort.shellSort(listaCalif, lessCount)
     
         for i in range(1, numPel+1):
-            ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaMenosVotos, ind["title"])
+            ind = lt.getElement(listaCalif, i)
+            lt.addLast(listaMenosVotos, ind["title"])
 
         return listaMenosVotos["elements"]
 
     elif decision == 3:
-        listaMejorAverage = lst.newList("ARRAY_LIST")
-        SSort.shellSort(listaTAD, greaterVote)
+        listaMejorAverage = lt.newList("ARRAY_LIST")
+        SSort.shellSort(listaCalif, greaterVote)
 
         for i in range(1, numPel+1):
-            ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaMejorAverage, ind["title"])
+            ind = lt.getElement(listaCalif, i)
+            lt.addLast(listaMejorAverage, ind["title"])
         return listaMejorAverage["elements"]
 
     elif decision == 4:
-        listaPeorAverage = lst.newList("ARRAY_LIST")
-        SSort.shellSort(listaTAD, lessVote)
+        listaPeorAverage = lt.newList("ARRAY_LIST")
+        SSort.shellSort(listaCalif, lessVote)
 
         for i in range(1, numPel+1):
-            ind = lst.getElement(listaTAD, i)
-            lst.addLast(listaPeorAverage, ind["title"])
+            ind = lt.getElement(listaCalif, i)
+            lt.addLast(listaPeorAverage, ind["title"])
         return listaPeorAverage["elements"]
 
 def conocerDirector(listaCalif, listaDirector, nombre)->tuple:
-    lista1 = lst.newList("ARRAY_LIST")
-    lista2 = lst.newList("ARRAY_LIST")
+    lista1 = lt.newList("ARRAY_LIST")
+    lista2 = lt.newList("ARRAY_LIST")
 
     contador = 0
     contador2 = 0
-    for i in range(0, len(listaCalif)):
-        if listaDirector[i]["director_name"].lower() == nombre.lower():
-            lst.addLast(lista1, i)
+    for i in range(0, lt.size(listaCalif)):
+        if listaDirector["elements"][i]["director_name"].lower() == nombre.lower():
+            lt.addLast(lista1, i)
 
-    tam = lst.size(lista1)
+    tam = lt.size(lista1)
 
     for i in range(1, tam+1):
-        ind = lst.getElement(lista1, i)    
-        contador += float(listaCalif[ind]["vote_average"])
+        ind = lt.getElement(lista1, i)    
+        contador += float(listaCalif["elements"][ind]["vote_average"])
         contador2 += 1
-        titPeli = listaCalif[ind]["title"]
-        lst.addLast(lista2, titPeli)
+        titPeli = listaCalif["elements"][ind]["title"]
+        lt.addLast(lista2, titPeli)
     if contador2 == 0:
         return lista2["elements"], 0, 0
 
@@ -219,10 +186,10 @@ def conocerDirector(listaCalif, listaDirector, nombre)->tuple:
     return lista2["elements"], contador2, prom
 
 def pruebaCarga(listaCalif):
-    listaTAD = lst.newList("ARRAY_LIST")
+    listaTAD = lt.newList("ARRAY_LIST")
     
     for i in listaCalif:
-        lst.addLast(listaTAD, i)
+        lt.addLast(listaTAD, i)
 
     start = process_time()
     SSort.shellSort(listaTAD, greaterVote)
@@ -240,16 +207,14 @@ def main():
     Args: None
     Return: None 
     """
-    lista = [] #instanciar una lista vacia
-    lista2 = []
     while True:
         printMenu() #imprimir el menu de opciones en consola
         inputs =input('Seleccione una opción para continuar:\n') #leer opción ingresada
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
-                loadCSVFile("Data\SmallMoviesDetailsCleaned.csv", lista)
-                loadCSVFile("Data\MoviesCastingRaw-small.csv", lista2)
-                print("Datos cargados, "+str(len(lista)+len(lista2))+" elementos cargados")
+                lista = loadCSVFile("Data\SmallMoviesDetailsCleaned.csv")
+                lista2 = loadCSVFile("Data\MoviesCastingRaw-small.csv")
+                print("Datos cargados, "+str(lt.size(lista)+lt.size(lista2))+" elementos cargados")
             elif int(inputs[0])==2: #opcion 2
                 if len(lista)==0: #obtener la longitud de la lista
                     print("La lista esta vacía")    
