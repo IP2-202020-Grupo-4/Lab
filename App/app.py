@@ -93,10 +93,9 @@ def printMenu():
     """
     print("\nBienvenido")
     print("1- Cargar Datos")
-    print("2- Contar los elementos de la Lista")
-    print("3- Consultar buenas películas de cierto director")
-    print("4- Consultar ranking de películas")
-    print("5- Conocer director")
+    print("2- Consultar buenas películas de cierto director")
+    print("3- Consultar ranking de películas")
+    print("4- Conocer director")
     print("0- Salir")
 
 def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
@@ -215,15 +214,11 @@ def main():
                 lista = loadCSVFile("Data\SmallMoviesDetailsCleaned.csv")
                 lista2 = loadCSVFile("Data\MoviesCastingRaw-small.csv")
                 print("Datos cargados, "+str(lt.size(lista)+lt.size(lista2))+" elementos cargados")
-            elif int(inputs[0])==2: #opcion 2
-                if len(lista)==0: #obtener la longitud de la lista
-                    print("La lista esta vacía")    
-                else: print("La lista tiene "+str(len(lista))+" elementos")
-            elif int(inputs[0])==3:
+            elif int(inputs[0])==2:
                 nombreDir = input("Ingrese el nombre del director: ")
                 numPeli, prom = encontrarBuenasPeli(lista, lista2, nombreDir)
                 print("El director {0} tiene {1} pelicula(s) buenas con puntaje promedio de {2}.".format(nombreDir, numPeli, prom))
-            elif int(inputs[0])==4:
+            elif int(inputs[0])==3:
                 print("¿Qué tipo de ranking quiere consultar?")
                 print("1- Ranking películas más votadas.")
                 print("2- Ranking películas menos votadas.")
@@ -233,11 +228,11 @@ def main():
                 numPel = int(input("¿Cuántas películas quiere meter en el ranking? \n: "))
                 resultado = rankingPeli(lista, decision, numPel)
                 print("El ranking solicitado es: {0}".format(resultado))
-            elif int(inputs[0])==5:
+            elif int(inputs[0])==4:
                 nombreDir = input("Ingrese el nombre del director: ")
                 titulos, numPeli, prom = conocerDirector(lista, lista2, nombreDir)
                 print("El director {0} tiene {1} pelicula(s) con puntaje promedio de {2}.\nSus películas son: {3}".format(nombreDir, numPeli, prom, titulos))
-            elif int(inputs[0])==6:
+            elif int(inputs[0])==5:
                 pruebaCarga(lista)
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
