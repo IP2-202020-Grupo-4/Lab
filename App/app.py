@@ -163,7 +163,7 @@ def conocerActor(listaCalif, listaDirector, nombre)->tuple:
         lt.addLast(lista2, titPeli)
         lt.addLast(lista3, titDirec)
     if contador2 == 0:
-        return lista2["elements"], 0, 0
+        return lista2["elements"], 0, 0, "Ninguno"
 
 
     
