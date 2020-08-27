@@ -52,6 +52,7 @@ def printMenu():
     print("3- Consultar ranking de películas")
     print("4- Conocer director")
     print("5- Conocer actor")
+    print('6- Conocer genero')
     print("0- Salir")
 
 def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
@@ -184,6 +185,31 @@ def conocerActor(listaCalif, listaDirector, nombre)->tuple:
     prom = contador/contador2
     return lista2["elements"], contador2, prom, director
 
+def EntenderGenero(listaCalif, listaDirector, genero)->tuple:
+    lista1 = lt.newList("ARRAY_LIST")
+    lista2 = lt.newList("ARRAY_LIST")
+    for i in range(0, lt.size(listaDirector)):
+        if (genero.lower() in listaCalif["elements"][i]["genres"].lower() ):
+            lt.addLast(lista1, i)
+
+    tam = lt.size(lista1)
+
+    contador = 0
+    contador2 = 0
+
+    for i in range(1, tam+1):
+        ind = lt.getElement(lista1, i)    
+        contador += float(listaCalif["elements"][ind]["vote_count"])
+        contador2 += 1
+        titPeli = listaCalif["elements"][ind]["title"]
+        lt.addLast(lista2, titPeli)
+    if contador2 == 0:
+        return lista2["elements"], 0, 0, "Ninguno"
+        
+    prom=contador/contador2
+    return (lista2['elements'], contador2, prom)
+    
+    
 
 
 def main():
@@ -215,10 +241,14 @@ def main():
                 print("El director {0} tiene {1} pelicula(s) con puntaje promedio de {2}.\nSus películas son: {3}".format(nombreDir, numPeli, prom, titulos))
             elif int(inputs[0])==5:
                 nombreActor = input("Ingrese el nombre del actor: ")
-                titulos, numPeli, prom, director = conocerActor(lista, lista2, nombreActor)
-                print("El actor {0} ha participado en {1} pelicula(s) con puntaje promedio de {2}.\nEl director con el que más participó es: {3} \nParticipó en: {4}".format(nombreActor, numPeli, prom, director, titulos))
+                titulos, numPeli, prom = conocerActor(lista, lista2, nombreActor)
+            elif int(inputs[0])==6:
+                genero = input('Ingrese el genero: ')
+                titulos, numPeli, prom =EntenderGenero(lista,lista2,genero)
+                print("El genero {0} tiene {1} pelicula(s) con promedio de votos de: {2}.\nEstas peliculas son: {3}".format(genero, numPeli, prom, titulos))
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
+            
 
 if __name__ == "__main__":
     main()
