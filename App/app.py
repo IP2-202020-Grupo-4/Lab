@@ -53,6 +53,7 @@ def printMenu():
     print("4- Conocer director")
     print("5- Conocer actor")
     print('6- Conocer genero')
+    print("7- Ranking por genero")
     print("0- Salir")
 
 def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
@@ -209,7 +210,51 @@ def EntenderGenero(listaCalif, listaDirector, genero)->tuple:
     prom=contador/contador2
     return (lista2['elements'], contador2, prom)
     
+def RankingGenero (listaCalificacion, listaDirector, genero, numPel, desicion, aod)->tuple:
+     
+     listaCalif = lt.newList("ARRAY_LIST")
+     for i in range(len(listaCalif["elements"])):
+         ind = lt.getElement(listaCalif, i)
+         if ind["genre"].lower() == genero.lower:
+             lt.addLast(listaCalif, ind)
+     
+    if decision == 1:
+        listaMasVotos = lt.newList("ARRAY_LIST")
+        SSort.shellSort(listaCalif, greaterCount)
+        
+        for i in range(1, numPel+1):
+            ind = lt.getElement(listaCalif, i)
+            lt.addLast(listaMasVotos, ind["title"])
+        return listaMasVotos["elements"]
+
+    elif decision == 2:
+        listaMenosVotos = lt.newList("ARRAY_LIST")
+        SSort.shellSort(listaCalif, lessCount)
     
+        for i in range(1, numPel+1):
+            ind = lt.getElement(listaCalif, i)
+            lt.addLast(listaMenosVotos, ind["title"])
+
+        return listaMenosVotos["elements"]
+
+    elif decision == 3:
+        listaMejorAverage = lt.newList("ARRAY_LIST")
+        SSort.shellSort(listaCalif, greaterVote)
+
+        for i in range(1, numPel+1):
+            ind = lt.getElement(listaCalif, i)
+            lt.addLast(listaMejorAverage, ind["title"])
+        return listaMejorAverage["elements"]
+
+    elif decision == 4:
+        listaPeorAverage = lt.newList("ARRAY_LIST")
+        SSort.shellSort(listaCalif, lessVote)
+
+        for i in range(1, numPel+1):
+            ind = lt.getElement(listaCalif, i)
+            lt.addLast(listaPeorAverage, ind["title"])
+        return listaPeorAverage["elements"]
+
 
 
 def main():
@@ -246,6 +291,17 @@ def main():
                 genero = input('Ingrese el genero: ')
                 titulos, numPeli, prom =EntenderGenero(lista,lista2,genero)
                 print("El genero {0} tiene {1} pelicula(s) con promedio de votos de: {2}.\nEstas peliculas son: {3}".format(genero, numPeli, prom, titulos))
+            elif int(inputs[0])==7
+                genero=input("¿Qué generó desea consultar?")
+                print("¿Qué tipo de ranking quiere consultar?")
+                print("1- Ranking películas más votadas.")
+                print("2- Ranking películas menos votadas.")
+                print("3- Ranking películas con mejor calificación.")
+                print("4- Ranking películas con peor calificación.")
+                decision = int(input(""))
+                numPel = int(input("¿Cuántas películas quiere meter en el ranking? \n: "))
+                resultado = rankingPeli(lista, decision, numPel)
+                print("El ranking solicitado es: {0}".format(resultado))
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
             
@@ -253,3 +309,4 @@ def main():
 if __name__ == "__main__":
     main()
 
+###SHITSHITSHITSHIT
