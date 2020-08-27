@@ -218,8 +218,8 @@ def main():
         inputs =input('Seleccione una opción para continuar:\n') #leer opción ingresada
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
-                lista = loadCSVFile("Data\SmallMoviesDetailsCleaned.csv")
-                lista2 = loadCSVFile("Data\MoviesCastingRaw-small.csv")
+                lista = loadCSVFile("Data/SmallMoviesDetailsCleaned.csv")
+                lista2 = loadCSVFile("Data/MoviesCastingRaw-small.csv")
                 print("Datos cargados, "+str(lt.size(lista)+lt.size(lista2))+" elementos cargados")
             elif int(inputs[0])==2:
                 nombreDir = input("Ingrese el nombre del director: ")
