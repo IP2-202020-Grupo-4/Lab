@@ -1,33 +1,3 @@
-"""
- * Copyright 2020, Departamento de sistemas y Computación, Universidad de Los Andes
- * 
- * Contribución de:
- *
- * Cristian Camilo Castellanos
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
- COMENTARIO
- """
-
-"""
-  Este módulo es una aplicación básica con un menú de opciones para cargar datos, contar elementos, y hacer búsquedas sobre una lista.
-"""
-
 import config as cf
 import sys
 import csv
@@ -58,18 +28,6 @@ def greaterVote(element1, element2):
     return False
 
 def loadCSVFile (file, sep=";"):
-    """
-    Carga un archivo csv a una lista
-    Args:
-        file
-            Archivo csv del cual se importaran los datos
-        sep = ";"
-            Separador utilizado para determinar cada objeto dentro del archivo
-        Try:
-        Intenta cargar el archivo CSV a la lista que se le pasa por parametro, si encuentra algun error
-        Borra la lista e informa al usuario
-    Returns: None  
-    """
     lst = lt.newList("ARRAY_LIST") #Usando implementacion arraylist
     print("Cargando archivo ....")
     t1_start = process_time() #tiempo inicial
@@ -88,14 +46,12 @@ def loadCSVFile (file, sep=";"):
 
 
 def printMenu():
-    """
-    Imprime el menu de opciones
-    """
     print("\nBienvenido")
     print("1- Cargar Datos")
     print("2- Consultar buenas películas de cierto director")
     print("3- Consultar ranking de películas")
     print("4- Conocer director")
+    print("5- Conocer actor")
     print("0- Salir")
 
 def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
@@ -184,28 +140,53 @@ def conocerDirector(listaCalif, listaDirector, nombre)->tuple:
     prom = contador/contador2
     return lista2["elements"], contador2, prom
 
-def pruebaCarga(listaCalif):
-    listaTAD = lt.newList("ARRAY_LIST")
+def conocerActor(listaCalif, listaDirector, nombre)->tuple:
+    lista1 = lt.newList("ARRAY_LIST")
+    lista2 = lt.newList("ARRAY_LIST")
+    lista3 = lt.newList("ARRAY_LIST")
+    diccDirectores = {}
+
+    contador = 0
+    contador2 = 0
+    for i in range(0, lt.size(listaDirector)):
+        if (listaDirector["elements"][i]["actor1_name"].lower() == nombre.lower()) or (listaDirector["elements"][i]["actor2_name"].lower() == nombre.lower()) or (listaDirector["elements"][i]["actor3_name"].lower() == nombre.lower()) or (listaDirector["elements"][i]["actor4_name"].lower() == nombre.lower()) or (listaDirector["elements"][i]["actor5_name"].lower() == nombre.lower()):
+            lt.addLast(lista1, i)
+
+    tam = lt.size(lista1)
+
+    for i in range(1, tam+1):
+        ind = lt.getElement(lista1, i)    
+        contador += float(listaCalif["elements"][ind]["vote_average"])
+        contador2 += 1
+        titPeli = listaCalif["elements"][ind]["title"]
+        titDirec = listaDirector["elements"][ind]["director_name"]
+        lt.addLast(lista2, titPeli)
+        lt.addLast(lista3, titDirec)
+    if contador2 == 0:
+        return lista2["elements"], 0, 0
+
+
     
-    for i in listaCalif:
-        lt.addLast(listaTAD, i)
+    for i in range(0, tam):
+        if lista3["elements"][i] not in list(diccDirectores.keys()):
+            diccDirectores[lista3["elements"][i]] = 1
+        else:
+            diccDirectores[lista3["elements"][i]] += 1
 
-    start = process_time()
-    SSort.shellSort(listaTAD, greaterVote)
-    stop = process_time()
+    llaves = list(diccDirectores.keys())
+    valores = list(diccDirectores.values())
+    mayor = max(valores)
 
-    print("Tiempo de ejecución ", stop - start ," segundos")
+    director = llaves[valores.index(mayor)]
+
+    
+
+    prom = contador/contador2
+    return lista2["elements"], contador2, prom, director
 
 
 
 def main():
-    """
-    Método principal del programa, se encarga de manejar todos los metodos adicionales creados
-
-    Instancia una lista vacia en la cual se guardarán los datos cargados desde el archivo
-    Args: None
-    Return: None 
-    """
     while True:
         printMenu() #imprimir el menu de opciones en consola
         inputs =input('Seleccione una opción para continuar:\n') #leer opción ingresada
@@ -233,7 +214,9 @@ def main():
                 titulos, numPeli, prom = conocerDirector(lista, lista2, nombreDir)
                 print("El director {0} tiene {1} pelicula(s) con puntaje promedio de {2}.\nSus películas son: {3}".format(nombreDir, numPeli, prom, titulos))
             elif int(inputs[0])==5:
-                pruebaCarga(lista)
+                nombreActor = input("Ingrese el nombre del actor: ")
+                titulos, numPeli, prom, director = conocerActor(lista, lista2, nombreActor)
+                print("El actor {0} ha participado en {1} pelicula(s) con puntaje promedio de {2}.\nEl director con el que más participó es: {3} \nParticipó en: {4}".format(nombreActor, numPeli, prom, director, titulos))
             elif int(inputs[0])==0: #opcion 0, salir
                 sys.exit(0)
 
