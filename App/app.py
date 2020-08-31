@@ -57,20 +57,14 @@ def printMenu():
     print("0- Salir")
 
 def encontrarBuenasPeli(listaCalif, listaDirector, nombre)->tuple:
-    lista1 = lt.newList("ARRAY_LIST")
     contador = 0
     contador2 = 0
     for i in range(0, lt.size(listaCalif)):
         if listaDirector["elements"][i]["director_name"].lower() == nombre.lower():
-            lt.addLast(lista1, i)
+            if float(listaCalif["elements"][i]["vote_average"]) >= 6:
+                contador += float(listaCalif["elements"][i]["vote_average"])
+                contador2 += 1
 
-    tam = lt.size(lista1)
-
-    for i in range(1, tam+1):
-        ind = lt.getElement(lista1, i)    
-        if float(listaCalif["elements"][ind]["vote_average"]) >= 6:
-            contador += float(listaCalif["elements"][ind]["vote_average"])
-            contador2 += 1
     if contador2 == 0:
         return 0, 0
 
@@ -120,32 +114,25 @@ def rankingPeli(listaCalif, decision, numPel)->list:
 
 def conocerDirector(listaCalif, listaDirector, nombre)->tuple:
     lista1 = lt.newList("ARRAY_LIST")
-    lista2 = lt.newList("ARRAY_LIST")
 
     contador = 0
     contador2 = 0
     for i in range(0, lt.size(listaCalif)):
         if listaDirector["elements"][i]["director_name"].lower() == nombre.lower():
-            lt.addLast(lista1, i)
+            contador += float(listaCalif["elements"][i]["vote_average"])
+            contador2 += 1
+            titPeli = listaCalif["elements"][i]["title"]
+            lt.addLast(lista1, titPeli)
 
-    tam = lt.size(lista1)
-
-    for i in range(1, tam+1):
-        ind = lt.getElement(lista1, i)    
-        contador += float(listaCalif["elements"][ind]["vote_average"])
-        contador2 += 1
-        titPeli = listaCalif["elements"][ind]["title"]
-        lt.addLast(lista2, titPeli)
     if contador2 == 0:
-        return lista2["elements"], 0, 0
+        return lista1["elements"], 0, 0
 
     prom = contador/contador2
-    return lista2["elements"], contador2, prom
+    return lista1["elements"], contador2, prom
 
 def conocerActor(listaCalif, listaDirector, nombre)->tuple:
     lista1 = lt.newList("ARRAY_LIST")
     lista2 = lt.newList("ARRAY_LIST")
-    lista3 = lt.newList("ARRAY_LIST")
     diccDirectores = {}
 
     contador = 0
@@ -153,27 +140,25 @@ def conocerActor(listaCalif, listaDirector, nombre)->tuple:
     for i in range(0, lt.size(listaDirector)):
         if (listaDirector["elements"][i]["actor1_name"].lower() == nombre.lower()) or (listaDirector["elements"][i]["actor2_name"].lower() == nombre.lower()) or (listaDirector["elements"][i]["actor3_name"].lower() == nombre.lower()) or (listaDirector["elements"][i]["actor4_name"].lower() == nombre.lower()) or (listaDirector["elements"][i]["actor5_name"].lower() == nombre.lower()):
             lt.addLast(lista1, i)
+            contador += float(listaCalif["elements"][i]["vote_average"])
+            contador2 += 1
+            titPeli = listaCalif["elements"][i]["title"]
+            titDirec = listaDirector["elements"][i]["director_name"]
+            lt.addLast(lista1, titPeli)
+            lt.addLast(lista2, titDirec)
 
-    tam = lt.size(lista1)
-
-    for i in range(1, tam+1):
-        ind = lt.getElement(lista1, i)    
-        contador += float(listaCalif["elements"][ind]["vote_average"])
-        contador2 += 1
-        titPeli = listaCalif["elements"][ind]["title"]
-        titDirec = listaDirector["elements"][ind]["director_name"]
-        lt.addLast(lista2, titPeli)
-        lt.addLast(lista3, titDirec)
+    tam = lt.size(lista2)
+    
     if contador2 == 0:
-        return lista2["elements"], 0, 0, "Ninguno"
+        return lista1["elements"], 0, 0, "Ninguno"
 
 
     
     for i in range(0, tam):
-        if lista3["elements"][i] not in list(diccDirectores.keys()):
-            diccDirectores[lista3["elements"][i]] = 1
+        if lista2["elements"][i] not in list(diccDirectores.keys()):
+            diccDirectores[lista2["elements"][i]] = 1
         else:
-            diccDirectores[lista3["elements"][i]] += 1
+            diccDirectores[lista2["elements"][i]] += 1
 
     llaves = list(diccDirectores.keys())
     valores = list(diccDirectores.values())
@@ -184,47 +169,41 @@ def conocerActor(listaCalif, listaDirector, nombre)->tuple:
     
 
     prom = contador/contador2
-    return lista2["elements"], contador2, prom, director
+    return lista1["elements"], contador2, prom, director
 
 def entenderGenero(listaCalif, genero)->tuple:
     lista1 = lt.newList("ARRAY_LIST")
-    lista2 = lt.newList("ARRAY_LIST")
-    for i in range(0, lt.size(listaCalif)):
-        if (genero.lower() in listaCalif["elements"][i]["genres"].lower() ):
-            lt.addLast(lista1, i)
-
-    tam = lt.size(lista1)
-
     contador = 0
     contador2 = 0
 
-    for i in range(1, tam+1):
-        ind = lt.getElement(lista1, i)    
-        contador += float(listaCalif["elements"][ind]["vote_count"])
-        contador2 += 1
-        titPeli = listaCalif["elements"][ind]["title"]
-        lt.addLast(lista2, titPeli)
+    for i in range(0, lt.size(listaCalif)):
+        if (genero.lower() in listaCalif["elements"][i]["genres"].lower() ):
+            contador += float(listaCalif["elements"][i]["vote_count"])
+            contador2 += 1
+            titPeli = listaCalif["elements"][i]["title"]
+            lt.addLast(lista1, titPeli)
+
     if contador2 == 0:
-        return lista2["elements"], 0, 0, "Ninguno"
+        return lista1["elements"], 0, 0, "Ninguno"
         
     prom=contador/contador2
-    return (lista2['elements'], contador2, prom)
+    return (lista1['elements'], contador2, prom)
     
 def rankingGenero (listaDetalles, genero, numPel, decision)->tuple:
     listaCalif = lt.newList("ARRAY_LIST")
     contador = 0
     contador2 = 0
 
-    for i in range(0, lt.size(listaDetalles)+1):
+    for i in range(0, lt.size(listaDetalles)):
         if (genero.lower() in listaDetalles["elements"][i]["genres"].lower()):
             ind = listaDetalles["elements"][i]
             lt.addLast(listaCalif, ind)
-     
+
     if decision == 1:
         listaMasVotos = lt.newList("ARRAY_LIST")
         SSort.shellSort(listaCalif, greaterCount)
         
-        for i in range(1, numPel+1):
+        for i in range(0, numPel+1):
             elem = listaCalif["elements"][i]
             lt.addLast(listaMasVotos, elem["title"])
             contador += float(elem["vote_count"])
@@ -241,7 +220,7 @@ def rankingGenero (listaDetalles, genero, numPel, decision)->tuple:
         listaMenosVotos = lt.newList("ARRAY_LIST")
         SSort.shellSort(listaCalif, lessCount)
     
-        for i in range(1, numPel+1):
+        for i in range(0, numPel+1):
             elem = listaCalif["elements"][i]
             lt.addLast(listaMenosVotos, elem["title"])
             contador += float(elem["vote_count"])
@@ -258,7 +237,7 @@ def rankingGenero (listaDetalles, genero, numPel, decision)->tuple:
         listaMejorAverage = lt.newList("ARRAY_LIST")
         SSort.shellSort(listaCalif, greaterVote)
 
-        for i in range(1, numPel+1):
+        for i in range(0, numPel+1):
             elem = listaCalif["elements"][i]
             lt.addLast(listaMejorAverage, elem["title"])
             contador += float(elem["vote_average"])
@@ -276,7 +255,7 @@ def rankingGenero (listaDetalles, genero, numPel, decision)->tuple:
         listaPeorAverage = lt.newList("ARRAY_LIST")
         SSort.shellSort(listaCalif, lessVote)
 
-        for i in range(1, numPel+1):
+        for i in range(0, numPel+1):
             elem = listaCalif["elements"][i]
             lt.addLast(listaPeorAverage, elem["title"])
             contador += float(elem["vote_average"])
@@ -320,7 +299,8 @@ def main():
                 print("El director {0} tiene {1} pelicula(s) con puntaje promedio de {2}.\nSus películas son: {3}".format(nombreDir, numPeli, prom, titulos))
             elif int(inputs[0])==5:
                 nombreActor = input("Ingrese el nombre del actor: ")
-                titulos, numPeli, prom = conocerActor(lista, lista2, nombreActor)
+                titulos, numPeli, prom, director = conocerActor(lista, lista2, nombreActor)
+                print("El actor {0} tiene {1} pelicula(s) con puntaje promedio de {2}.\nEl director con el cual más ha colaborado es {3}. \nSus películas son: {4}".format(nombreActor, numPeli, prom, director, titulos))
             elif int(inputs[0])==6:
                 genero = input('Ingrese el género: ')
                 titulos, numPeli, prom = entenderGenero(lista,genero)
