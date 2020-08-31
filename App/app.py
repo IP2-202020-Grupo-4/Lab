@@ -3,7 +3,8 @@ import sys
 import csv
 from time import process_time 
 from ADT import list as lt
-from Sorting import mergesort as mgSort
+from Sorting import shellsort as SSort
+
 
 
 def lessVote(element1, element2):
@@ -81,7 +82,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
     
     if decision == 1:
         listaMasVotos = lt.newList("ARRAY_LIST")
-        mgSort.mergesort(listaCalif, greaterCount)
+        SSort.shellSort(listaCalif, greaterCount)
         
         for i in range(1, numPel+1):
             ind = lt.getElement(listaCalif, i)
@@ -91,7 +92,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
     elif decision == 2:
         
         listaMenosVotos = lt.newList("ARRAY_LIST")
-        mgSort.mergesort(listaCalif, lessCount)
+        SSort.shellSort(listaCalif, lessCount)
     
         for i in range(1, numPel+1):
             ind = lt.getElement(listaCalif, i)
@@ -101,7 +102,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
 
     elif decision == 3:
         listaMejorAverage = lt.newList("ARRAY_LIST")
-        mgSort.mergesort(listaCalif, greaterVote)
+        SSort.shellSort(listaCalif, greaterVote)
 
         for i in range(1, numPel+1):
             ind = lt.getElement(listaCalif, i)
@@ -110,7 +111,7 @@ def rankingPeli(listaCalif, decision, numPel)->list:
 
     elif decision == 4:
         listaPeorAverage = lt.newList("ARRAY_LIST")
-        mgSort.mergesort(listaCalif, lessVote)
+        SSort.shellSort(listaCalif, lessVote)
 
         for i in range(1, numPel+1):
             ind = lt.getElement(listaCalif, i)
@@ -221,7 +222,7 @@ def rankingGenero (listaDetalles, genero, numPel, decision)->tuple:
      
     if decision == 1:
         listaMasVotos = lt.newList("ARRAY_LIST")
-        mgSort.mergesort(listaCalif, greaterCount)
+        SSort.shellSort(listaCalif, greaterCount)
         
         for i in range(1, numPel+1):
             elem = listaCalif["elements"][i]
@@ -238,7 +239,7 @@ def rankingGenero (listaDetalles, genero, numPel, decision)->tuple:
 
     elif decision == 2:
         listaMenosVotos = lt.newList("ARRAY_LIST")
-        mgSort.mergesort(listaCalif, lessCount)
+        SSort.shellSort(listaCalif, lessCount)
     
         for i in range(1, numPel+1):
             elem = listaCalif["elements"][i]
@@ -255,7 +256,7 @@ def rankingGenero (listaDetalles, genero, numPel, decision)->tuple:
 
     elif decision == 3:
         listaMejorAverage = lt.newList("ARRAY_LIST")
-        mgSort.mergesort(listaCalif, greaterVote)
+        SSort.shellSort(listaCalif, greaterVote)
 
         for i in range(1, numPel+1):
             elem = listaCalif["elements"][i]
@@ -273,7 +274,7 @@ def rankingGenero (listaDetalles, genero, numPel, decision)->tuple:
 
     elif decision == 4:
         listaPeorAverage = lt.newList("ARRAY_LIST")
-        mgSort.mergesort(listaCalif, lessVote)
+        SSort.shellSort(listaCalif, lessVote)
 
         for i in range(1, numPel+1):
             elem = listaCalif["elements"][i]
@@ -296,8 +297,8 @@ def main():
         inputs =input('Seleccione una opción para continuar:\n') #leer opción ingresada
         if len(inputs)>0:
             if int(inputs[0])==1: #opcion 1
-                lista = loadCSVFile("Data/SmallMoviesDetailsCleaned.csv")
-                lista2 = loadCSVFile("Data/MoviesCastingRaw-small.csv")
+                lista = loadCSVFile("Data/AllMoviesDetailsCleaned.csv")
+                lista2 = loadCSVFile("Data/AllMoviesCastingRaw.csv")
                 print("Datos cargados, "+str(lt.size(lista)+lt.size(lista2))+" elementos cargados")
             elif int(inputs[0])==2:
                 nombreDir = input("Ingrese el nombre del director: ")
